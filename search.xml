@@ -4,6 +4,19 @@
   
     
     <entry>
+      <title>五分钟了解编译，链接和可执行文件</title>
+      <link href="/2022/05/26/%E4%BA%94%E5%88%86%E9%92%9F%E4%BA%86%E8%A7%A3%E7%BC%96%E8%AF%91%EF%BC%8C%E9%93%BE%E6%8E%A5%E5%92%8C%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6/"/>
+      <url>/2022/05/26/%E4%BA%94%E5%88%86%E9%92%9F%E4%BA%86%E8%A7%A3%E7%BC%96%E8%AF%91%EF%BC%8C%E9%93%BE%E6%8E%A5%E5%92%8C%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6/</url>
+      
+        <content type="html"><![CDATA[<h2 id="源文件的编译和可执行文件"><a href="#源文件的编译和可执行文件" class="headerlink" title="源文件的编译和可执行文件"></a>源文件的编译和可执行文件</h2><h4 id="head-id">开始</h4><ul><li><a href="#1">编译</a></li><li><a href="#2">链接</a></li><li><a href="#3">执行</a></li></ul><ol><li><font size = 4>不同的代码（**cpp,python,c,java**）都是会编译称为相同的<mark><font color=red>本地代码</font></mark>,本地代码就是类似于机器语言的母语，本地代码就是转换为机器语言的程序。</font></li><li><font size = 4> **exe**文件使用的就是本地代码，将每一个字节使用两位十六进制的数字表示，就可以得到本地代码的真实面目,<mark>这个过程叫做(***Dump***)</mark></font></li><li><font size = 4>**编译器的三大特点**：<b><font color="blue">- 编程语言- 生成的代码作用的CPU- 哪种环境下运行的(**运行环境=操作系统+硬件**)</font></b></font></li><li><p><font size=4>从源代码到可执行文件：</p><ul><li><h5 id="1">编译</h5><ul><li><blockquote><p>gcc -o -w helloworld.cpp</p></blockquote><p>上面的命令会生成一个<font color=red>.obj</font>格式的文件，称为目标文件。目标文件不是可执行文件，因为没有执行链接。</p></li></ul></li><li><h5 id="2">链接:</h5><ul><li><p><mark>链接的过程就是把多个目标文件结合形成一个可执行文件的过程</mark>,分为下面两种：</p><ul><li><strong>使用库文件</strong>：<ul><li>静态链接库：库文件，格式为<font color=red>.lib</font>,包含了一些已经写好的函数的<strong>比如标准库函数</strong>的目标文件，</li><li>动态链接库（导入库）：仅仅包含了一些<font color=red>函数</font>的<strong>文件夹信息</strong>和<strong>函数的处于哪个dll文件</strong>的信息，有的时候并不一定要使用导入库，只要能够在动态链接的过程中使用<strong>dll</strong>函数就行，注意动态链接并不是把目标文件结合的过程，而是类似于一种<strong>API</strong>的调用。</li></ul></li><li><strong>不使用库文件</strong>：<ul><li>在执行链接的过程中要手动添加所需要的目标文件。</li></ul></li></ul></li><li><p><mark><strong>启动:</strong></mark></p><ul><li>就算不需要额外的函数或者<strong>API（Windows提供的程序应用接口）</strong>,目标文件也一定要执行链接，原因在与可执行文件一定要包含一个<strong>启动</strong>的目标文件，这是编译器提供的，它包含了程序的起始位置相结合的内容。</li></ul></li></ul></li><li><h5 id="3">执行:</h5><ul><li>可执行文件生成后如果需要运行会被加载到内存中，同时产生<strong>栈和堆</strong>:<ul><li>栈：用于保存函数执行时<mark><strong>临时的变量数据以及函数调用的所需要的空间</strong></mark>的内存区域。这就很容易解释为什么需要把大内存的变量数据放到主函数外面，因为主函数里面所用到的所有内存都是在一个栈中。在执行处理数据的操作结束后，相应的内存会被清理掉。</li><li>堆：用于保存程序执行时所有数据和对象的内存领域。</li><li><mark><strong>堆和栈都是在程序执行的过程中申请分配的</strong></mark>,如果没有及时清理掉内存，那么这个内存就会一直存在，处于使用状态，称作<mark><strong><em>内存泄漏</em></strong></mark>。这是十分麻烦的漏洞，很容易造成机器内存不足宕机。但是部分高级语言<font color=green size = 5>java,python,C#</font>由于拥有高级的垃圾回收机制，会自动清理内存，防止内存泄漏。</li></ul></li><li><strong>再配置信息</strong>：<ul><li>链接器会在可执行文件的开头配置程序执行的<strong>基址</strong>，所有的变量、函数的地址都是<strong>连续</strong>的分布在基址后面的内存中，<font color=red>注意程序里面的地址都是虚拟地址，并不是真正的物理地址，为了保证多个程序运行时不会发生内存冲突，多个程序的里面的虚拟地址可能相同，但是由于程序的基址不同，真正的物理地址是不一样的</font>。</li></ul></li><li><strong>程序运行的内存=变量组的大小+函数组的大小+栈空间+堆空间+操作系统空间</strong></li></ul></li></ul></li><li><p>一些名词：</p><ul><li><strong>分割编译</strong>：源文件分为多个文件，编译器编译的过程中就会产生多个目标文件，链接的时候多个目标文件就会结合到一个可执行文件中。但是，多文件的好处在于方便代码的管理。</li><li><strong>叠加链接</strong>：有些函数一定不会同时执行，那么将他们交替加载到同一个内存地址中运行，就可以节省内存空间。</li><li><strong>dll文件的好处</strong>：<ul><li>可以被多个程序同时使用，节省代码，节省内存空间。</li><li>修改的时候不需要重新链接并且导入到链接库中，只需要修改<font color=red>dll</font>文件。&lt;/font&gt;</li></ul></li></ul></li></ol><p><a href="#head-id">回到开头</a></p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>线段树和子段和，一篇就够</title>
       <link href="/2022/05/26/%E7%BA%BF%E6%AE%B5%E6%A0%91%E4%B8%8E%E5%AD%90%E6%AE%B5%E5%92%8C/"/>
       <url>/2022/05/26/%E7%BA%BF%E6%AE%B5%E6%A0%91%E4%B8%8E%E5%AD%90%E6%AE%B5%E5%92%8C/</url>
